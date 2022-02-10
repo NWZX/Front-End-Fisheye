@@ -1,36 +1,91 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <meta charset="utf-8">
-    <link rel="icon" type="image/png" href="assets/favicon.png">
-    <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
-    <title>Fisheye - photographe </title>
-  </head>
-  <body>
-    <header>
-      <img src="assets/images/logo.png" class="logo" />
-    </header>
-    <main id="main">
-      <div class="photograph-header">
-        <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Fisheye - photographe </title>
+</head>
+
+<body>
+  <header>
+    <a href="/"><img src="assets/images/logo.png" alt="Fisheye Home Page" class="logo" loading="lazy" /></a>
+  </header>
+  <main id="main">
+    <div class="photograph-header">
+      <div>
+        <h1 id="ui-name"></h1>
+        <p>
+          <span id="ui-location">London, UK</span><br />
+          <span id="ui-tagline">Voir le beau dans le quotidien</span>
+        </p>
       </div>
-    </main>
-    <div id="contact_modal">
-			<div class="modal">
-				<header>
-          <h2>Contactez-moi</h2>
-          <img src="assets/icons/close.svg" onclick="closeModal()" />
-        </header>
-				<form>
-					<div>
-						<label>Prénom</label>
-						<input />
-					</div>
-          <button class="contact_button">Envoyer</button>
-				</form>
-			</div>
-		</div>
-    <script src="/scripts/utils/contactForm.js"></script>
-  </body>
+      <button id="ui-contact-btn" class="contact_button">Contactez-moi</button>
+      <img id="ui-avatar" src="#" alt="" loading="lazy" />
+    </div>
+    <div class="photograph-sorter">
+      <label for="selectbox-sorter-button">Trier par</label>
+      <div id="selectbox-sorter">
+        <button id="selectbox-sorter-button" class="selectbox-button" role="button" aria-haspopup="listbox" aria-expanded="false">Popularité<i class="fa fa-chevron-down"></i>
+        </button>
+        <div role="listbox"
+          class="selectbox-listbox"
+          id="selectbox-sorter-listbox"
+          aria-activedescendant="listbox-sorter-1"
+          aria-selected="listbox-sorter-1"
+          aria-labelledby="selectbox-sorter-button"
+          >
+        </div>
+      </div>
+    </div>
+    <div class="photograph-images">
+    </div>
+  </main>
+  <div id="ui-counter">
+    <span></span>
+    <span></span>
+  </div>
+  <div id="lightbox_modal">
+    <div class="modal">
+      <div style="width: 42px; margin-right: 1rem;"><a href="javascript:void(0);" class="lightbox-modal-prev" title="Previous Image"><i class="fa fa-chevron-left"></i></a></div>
+      <div></div>
+      <div style="width: 42px; text-align: right; margin-left: 1rem;">
+        <img class="lightbox-modal-close" src="assets/icons/close_red.svg" alt="Close dialog" tabindex="0" />
+        <a href="javascript:void(0);" class="lightbox-modal-next" title="Next Image"><i class="fa fa-chevron-right"></i></a>
+      </div>
+    </div>
+  </div>
+  <div id="contact_modal" aria-labelledby="contact-modal-title">
+    <div class="modal">
+      <header>
+        <h2 id="contact-modal-title"></h2>
+        <img class="contact-modal-close" src="assets/icons/close.svg" alt="Close Contact form" />
+      </header>
+      <form>
+        <div class="formData">
+          <label for="inputFirstName">Prénom</label>
+          <input id="inputFirstName" name="firstName" />
+        </div>
+        <div class="formData">
+          <label for="inputLastName">Nom</label>
+          <input id="inputLastName" name="lastName" />
+        </div>
+        <div class="formData">
+          <label for="inputEmail">Email</label>
+          <input id="inputEmail" name="email" />
+        </div>
+        <div class="formData">
+          <label for="inputMessage">Votre Message</label>
+          <textarea id="inputMessage" name="message"></textarea>
+        </div>
+        <button class="contact_button">Envoyer</button>
+      </form>
+    </div>
+  </div>
+  <script type="module" src="/scripts/pages/photographer/index.js"></script>
+</body>
+
 </html>

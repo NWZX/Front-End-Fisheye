@@ -1,17 +1,23 @@
-function photographerFactory(data) {
-    const { name, portrait } = data;
-
-    const picture = `assets/photographers/${portrait}`;
-
-    function getUserCardDOM() {
-        const article = document.createElement( 'article' );
-        const img = document.createElement( 'img' );
-        img.setAttribute("src", picture)
-        const h2 = document.createElement( 'h2' );
-        h2.textContent = name;
-        article.appendChild(img);
-        article.appendChild(h2);
-        return (article);
+/**
+ * Create Photographer element from data (BETTER SOLUTION/LESS CODE)
+ * @param {*} photographer Photographer object
+ * @returns Html DOM element
+ */
+function photographerFactory(photographer) {
+    const { id, name, portrait, city, country, price, tagline } = photographer;
+    const userCardDOM = document.createElement("article");
+    userCardDOM.innerHTML = `
+        <a href="/photographer.html?id=${id}" alt="${name}">
+          <img src="img_data/Photographers ID Photos/${portrait}" alt="" loading="lazy"/>
+          <h2>${name}</h2>
+        </a>
+        <p>
+          <span>${city}, ${country}</span><br />
+          <span>${tagline}</span><br />
+          <span>${price}€</span>
+        </p>
+    `;
+    return {
+        getUserCardDOM: () => userCardDOM
     }
-    return { name, picture, getUserCardDOM }
 }
