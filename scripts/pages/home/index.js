@@ -2,11 +2,15 @@ import { getAllPhotographers, initData } from "../../utils/data.js";
 import { UIElements } from "./UIElements.js";
 
 /**
- * Create Photographer element from data (BETTER SOLUTION/LESS CODE)
- * @param {*} photographer Photographer object
- * @returns Html DOM element
+ * @typedef {import("../../utils/data.js").PhotographerObject} PhotographerObject
  */
-function photographerFactory(photographer) {
+
+/**
+ * Create photographer media card
+ * @param {PhotographerObject} photographer Photographer object
+ * @returns {HTMLDivElement}
+ */
+const photographerFactory = (photographer) => {
     const { id, name, portrait, city, country, price, tagline } = photographer;
     const userCardDOM = document.createElement("article");
     userCardDOM.innerHTML = `
@@ -14,8 +18,8 @@ function photographerFactory(photographer) {
           <img src="assets/photographers/${portrait}" alt="" loading="lazy"/>
           <h2>${name}</h2>
         </a>
+        <address>${city}, ${country}</address>
         <p>
-          <span>${city}, ${country}</span><br />
           <span>${tagline}</span><br />
           <span>${price}€</span>
         </p>
@@ -23,7 +27,12 @@ function photographerFactory(photographer) {
     return userCardDOM;
 }
 
-async function displayData(photographers) {
+
+/**
+ * Create photographer grid
+ * @param {PhotographerObject[]} photographers 
+ */
+const createGrid = async (photographers) => {
     const photographersSection = UIElements.component.photographerGrid;
 
     const fragment = document.createDocumentFragment();
@@ -34,10 +43,13 @@ async function displayData(photographers) {
 }
 
 
+/**
+ * Initialize home page
+ */
 (async () => {
     // Récupère les datas des photographes
     await initData();
     const photographers = await getAllPhotographers();
-    displayData(photographers);
+    createGrid(photographers);
 })();
 

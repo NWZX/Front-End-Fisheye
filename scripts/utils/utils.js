@@ -18,6 +18,11 @@ export const isInteger = (value) => {
         !isNaN(parseInt(value, 10));
 }
 
+/**
+ * Trap the tab sequence inside a element
+ * @param {KeyboardEvent} event 
+ * @param {NodeListOf<Element>} focusableContent 
+ */
 export const captureTab = (event, focusableContent) => {
     const firstFocusableElement = focusableContent[0];
     const lastFocusableElement = focusableContent[focusableContent.length - 1];

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/photographer/modals/lightbox.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/photographer/modals/lightbox.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { getLightboxMediaByIndex, globalState } from "../../../utils/data.js";
+import { captureTab } from "../../../utils/utils.js";
+
+/**
+ * Initializes the lightbox modal event listeners
+ * @param {HTMLDivElement} lightboxElement 
+ */
+export const initLightbox = (lightboxElement) => {
+    const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusableContent = lightboxElement.querySelectorAll(focusableElements);
+    lightboxElement.addEventListener("keydown", (e) => {
+        switch (e.key) {
+        case "ArrowLeft":
+            updateLightboxModal(lightboxElement, globalState.lightboxPosition - 1);
+            break;
+        case "ArrowRight":
+            updateLightboxModal(lightboxElement, globalState.lightboxPosition + 1);
+            break;
+        case "Escape":
+            closeLightboxModal(lightboxElement);
+            break;
+        case "Tab":
+            captureTab(e, focusableContent);
+            break;
+        default:
+            break;
+        }
+    });
+
+    lightboxElement.querySelector(".lightbox-modal-close").addEventListener("click", () => {
+        closeLightboxModal(lightboxElement);
+    });
+    lightboxElement.querySelector(".lightbox-modal-close").addEventListener("keydown", (e) => {
+        e.key === "Enter" &amp;&amp; closeLightboxModal(lightboxElement);
+    });
+    lightboxElement.querySelector(".lightbox-modal-next").addEventListener("click", (e) => {
+        e.preventDefault();
+        updateLightboxModal(lightboxElement, globalState.lightboxPosition + 1);
+    });
+    lightboxElement.querySelector(".lightbox-modal-prev").addEventListener("click", (e) => {
+        e.preventDefault();
+        updateLightboxModal(lightboxElement, globalState.lightboxPosition - 1);
+    });
+}
+
+/**
+ * Opens the lightbox modal at the given index
+ * @param {HTMLDivElement} lightboxElement 
+ * @param {number} index 
+ */
+export const showLightboxModal = (lightboxElement, index) => {
+    updateLightboxModal(lightboxElement, index);
+    lightboxElement.style.display = "block";
+    lightboxElement.getElementsByClassName("lightbox-modal-close")[0].focus();
+}
+
+/**
+ * Close the lightbox modal and focus the last image shown
+ * @param {HTMLDivElement} lightboxElement 
+ */
+export const closeLightboxModal = (lightboxElement) => {
+    lightboxElement.style.display = "none";
+    document.querySelector(`#photographer-media-${globalState.lightboxPosition}`).children[0].focus();
+}
+
+/**
+ * Updates the lightbox modal with the given index
+ * @param {HTMLDivElement} lightboxElement 
+ * @param {number} index
+ */
+const updateLightboxModal = (lightboxElement, index) => {
+    const mediaObject = getLightboxMediaByIndex(index);
+    if (!mediaObject) {
+        closeLightboxModal(lightboxElement);
+        return;
+    }
+    if (mediaObject.image) {
+        const img = new Image();
+        img.src = `assets/images/${mediaObject.image}`;
+        img.alt = mediaObject.title;
+        img.tabIndex = 0;
+        img.className = "modal-image-view";
+        img.loading = "lazy";
+        img.onerror = () => { img.src = "assets/images/Missing_Image.svg" };
+        lightboxElement.children[0].children[1].replaceChildren(img);
+    } else if (mediaObject.video) {
+        lightboxElement.children[0].children[1].innerHTML = `&lt;video class="modal-image-view" src="assets/images/${mediaObject.video}" aria-label="${mediaObject.title}" autoplay loop controls tabIndex="0" />`
+    }
+    globalState.lightboxPosition = index;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#captureTab">captureTab</a></li><li><a href="global.html#checkForm">checkForm</a></li><li><a href="global.html#checkFormRealtime">checkFormRealtime</a></li><li><a href="global.html#closeContactModal">closeContactModal</a></li><li><a href="global.html#closeLightboxModal">closeLightboxModal</a></li><li><a href="global.html#createGrid">createGrid</a></li><li><a href="global.html#createMediaCard">createMediaCard</a></li><li><a href="global.html#createMediaCardContent">createMediaCardContent</a></li><li><a href="global.html#createMediaCardSub">createMediaCardSub</a></li><li><a href="global.html#createSelectbox">createSelectbox</a></li><li><a href="global.html#createSelectboxOption">createSelectboxOption</a></li><li><a href="global.html#displayContactModal">displayContactModal</a></li><li><a href="global.html#getAllMedia">getAllMedia</a></li><li><a href="global.html#getAllPhotographers">getAllPhotographers</a></li><li><a href="global.html#getMedia">getMedia</a></li><li><a href="global.html#getPhotographer">getPhotographer</a></li><li><a href="global.html#globalState">globalState</a></li><li><a href="global.html#HeaderFactory">HeaderFactory</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initContactModal">initContactModal</a></li><li><a href="global.html#initData">initData</a></li><li><a href="global.html#initLightbox">initLightbox</a></li><li><a href="global.html#isEmail">isEmail</a></li><li><a href="global.html#isInteger">isInteger</a></li><li><a href="global.html#listboxSelect">listboxSelect</a></li><li><a href="global.html#photographerFactory">photographerFactory</a></li><li><a href="global.html#selectboxClose">selectboxClose</a></li><li><a href="global.html#selectboxOpen">selectboxOpen</a></li><li><a href="global.html#selectboxToggle">selectboxToggle</a></li><li><a href="global.html#showError">showError</a></li><li><a href="global.html#showLightboxModal">showLightboxModal</a></li><li><a href="global.html#sortMediaObjects">sortMediaObjects</a></li><li><a href="global.html#textInputRealtimeValidation">textInputRealtimeValidation</a></li><li><a href="global.html#textInputValidation">textInputValidation</a></li><li><a href="global.html#updateLightboxModal">updateLightboxModal</a></li><li><a href="global.html#validateEmailField">validateEmailField</a></li><li><a href="global.html#validateMessageField">validateMessageField</a></li><li><a href="global.html#validateNameField">validateNameField</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Feb 15 2022 12:17:10 GMT-0400 (Bolivia Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

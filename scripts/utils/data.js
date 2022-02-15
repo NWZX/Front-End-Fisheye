@@ -17,12 +17,17 @@
  * @property {number} photographers.price
  * @property {string} photographers.portrait
 */
-
 /** @typedef {object} JsonObject
  * @property {PhotographerObject[]} photographers
  * @property {MediaObject[]} media
  * @property {MediaObject[]} lightboxMedia
  * @property {number} lightboxPosition
+ */
+/** @typedef {object} FormDataSubmit
+ * @property {string} firstName
+ * @property {string} lastName
+ * @property {string} email
+ * @property {string} message
  */
 
 

@@ -44,7 +44,7 @@ export const initLightbox = (lightboxElement) => {
 }
 
 /**
- * 
+ * Opens the lightbox modal at the given index
  * @param {HTMLDivElement} lightboxElement 
  * @param {number} index 
  */
@@ -54,15 +54,19 @@ export const showLightboxModal = (lightboxElement, index) => {
     lightboxElement.getElementsByClassName("lightbox-modal-close")[0].focus();
 }
 
+/**
+ * Close the lightbox modal and focus the last image shown
+ * @param {HTMLDivElement} lightboxElement 
+ */
 export const closeLightboxModal = (lightboxElement) => {
     lightboxElement.style.display = "none";
     document.querySelector(`#photographer-media-${globalState.lightboxPosition}`).children[0].focus();
 }
 
 /**
- * 
+ * Updates the lightbox modal with the given index
  * @param {HTMLDivElement} lightboxElement 
- * @param {import("../../../utils/data").MediaObject} [MediaObject]
+ * @param {number} index
  */
 const updateLightboxModal = (lightboxElement, index) => {
     const mediaObject = getLightboxMediaByIndex(index);
@@ -80,7 +84,7 @@ const updateLightboxModal = (lightboxElement, index) => {
         img.onerror = () => { img.src = "assets/images/Missing_Image.svg" };
         lightboxElement.children[0].children[1].replaceChildren(img);
     } else if (mediaObject.video) {
-        lightboxElement.children[0].children[1].innerHTML = `<video class="modal-image-view" src="assets/images/${mediaObject.video}" aria-label="${mediaObject.title}" autoplay loop control tabIndex="0" />`
+        lightboxElement.children[0].children[1].innerHTML = `<video class="modal-image-view" src="assets/images/${mediaObject.video}" aria-label="${mediaObject.title}" autoplay loop controls tabIndex="0" />`
     }
     globalState.lightboxPosition = index;
 }

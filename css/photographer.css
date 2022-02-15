@@ -21,17 +21,14 @@
     object-fit: cover;
 }
 
-/*#endregion*/
-
-/*#region Banner*/
-
 h1 {
     color: #D3573C;
     font-size: 3rem;
     font-weight: 400;
+    margin: 0;
 }
 
-.contact_button {
+.header-contact-btn {
     font-size: 20px;
     font-weight: bold;
     color: white;
@@ -43,6 +40,24 @@ h1 {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.header-city {
+    font-size: 1.5rem;
+    font-weight: 400;
+    font-style: normal;
+    color: #901C1C;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
+.header-tagline {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #525252;
+}
+
+/*#endregion*/
+
+/*#region Sorter*/
 
 .photograph-sorter {
     margin: 0 100px;
@@ -243,7 +258,7 @@ button.selectbox-button[aria-expanded="false"] + div.selectbox-listbox div {
 #contact_modal .modal {
     border-radius: 5px;
     background-color: #DB8876;
-    width: 40%;
+    width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -272,7 +287,7 @@ button.selectbox-button[aria-expanded="false"] + div.selectbox-listbox div {
     margin-bottom: 0.5rem;
 }
 
-.contact-btn {
+.contact-modal-close {
     background: none;
 	color: #FFF;
 	border: none;
@@ -282,9 +297,22 @@ button.selectbox-button[aria-expanded="false"] + div.selectbox-listbox div {
 	outline: inherit;
     display: inline;
 }
-.contact-btn:focus * {
+.contact-modal-close:focus * {
     outline: 2px solid #000;
     border-radius: 5px;
+}
+
+.contact-modal-button {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    padding: 11px;
+    width: 170px;
+    height: 70px;
+    border: none;
+    background-color: #901C1C;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 form {
@@ -333,6 +361,17 @@ form textarea {
 }
 .formData[data-error] input {
     box-shadow: #f30018 0px 0px 0px 2px inset;
+}
+
+@media screen and (max-width: 1024px) {
+    #contact_modal .modal {
+        width: 50%;
+    }
+}
+@media screen and (max-width: 1540px) {
+    #contact_modal .modal {
+        width: 42%;
+    }
 }
 
 /*#endregion*/
