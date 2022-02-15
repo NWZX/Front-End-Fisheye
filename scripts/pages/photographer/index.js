@@ -1,55 +1,83 @@
 import { getPhotographer, getAllMedia, initData, sortMediaObjects, setLightboxMedia } from "../../utils/data.js";
-import { createSelectbox } from "./component/listbox_sorter.js";
+import { isInteger } from "../../utils/utils.js";
+import { createSelectbox } from "./component/selectbox.js";
 import { displayContactModal, initContactModal } from "./modals/contact.js";
 import { initLightbox, showLightboxModal } from './modals/lightbox.js';
-;
+
 
 import { UIElements } from "./UIElements.js";
 
+/**
+ * Create media card sub element
+ * @param {string} title 
+ * @param {number} likes 
+ * @returns {HTMLDivElement}
+ */
 const createMediaCardSub = (title, likes) => {
     const mediaCardDOM = document.createElement("div");
     mediaCardDOM.classList.add("images_bottom");
-    mediaCardDOM.innerHTML = `
-        <p>${title}</p>
-        <span>${likes} ❤️</span>
-    `;
+
+    const titleDOM = document.createElement("p");
+    titleDOM.innerHTML = title;
+
+    const likesDOM = document.createElement("span");
+    likesDOM.innerText = `${likes} `;
+    const likesIcon = document.createElement("i");
+    likesIcon.classList.add("fa-solid", "fa-heart");
+    likesIcon.title = "Likes";
+    likesIcon.addEventListener("click", (e) => {
+        e.preventDefault();
+        likesDOM.innerText = `${likes + 1} `;
+        likesDOM.appendChild(likesIcon);
+    });
+
+    likesDOM.appendChild(likesIcon);
+    mediaCardDOM.appendChild(titleDOM);
+    mediaCardDOM.appendChild(likesDOM);
     return mediaCardDOM;
 }
 
 /**
- * 
+ * Create media card content
  * @param {"img" | "video"} type 
- * @param {*} likes 
- * @returns 
+ * @param {string} filename 
+ * @param {string} title 
+ * @returns {HTMLDivElement}
  */
 const createMediaCardContent = (type, filename, title) => {
     const content = document.createElement(type);
     content.setAttribute("src", `assets/images/${filename}`);
+    content.onerror = () => { type == "img" && content.setAttribute("src", `assets/images/Missing_Image.svg`) };
     content.setAttribute("alt", title);
     type == "img" && content.setAttribute("loading", "lazy");
     return content;
 }
 /**
- * 
+ * Create media card
  * @param {import("../../utils/data.js").MediaObject} media 
  * @param {number} index 
  * @returns {HTMLDivElement}
  */
 const createMediaCard = (media, index) => {
-    const { id, title, likes, image, video } = media;
+    const { title, likes, image, video } = media;
     const userCardDOM = document.createElement("div");
-    userCardDOM.setAttribute("data-id", id);
-    userCardDOM.style.order = index;
+    userCardDOM.id = `photographer-media-${index}`;
     const link = document.createElement("a");
-    link.setAttribute("href", `javascript:void(0)`);
     link.setAttribute("title", title);
     link.setAttribute("tabindex", "0");
-    link.addEventListener("click", () => {
-        console.log(`${title} clicked`);
-        showLightboxModal(UIElements.modal.lightboxModal, parseInt(userCardDOM.style.order));
+    link.addEventListener("click", (e) => {
+        e.preventDefault();
+        showLightboxModal(UIElements.modal.lightboxModal, index);
     });
-
-    const content = image ? createMediaCardContent("img", image, title) : createMediaCardContent("video", video, title);
+    
+    let content = "";
+    if (image) {
+        link.setAttribute("href", `/photographer/media/${media.image}`);
+        content = createMediaCardContent("img", image, title)
+    } else {
+        link.setAttribute("href", `/photographer/media/${media.video}`);
+        content = createMediaCardContent("video", video, title);
+    }
 
     link.appendChild(content);
     userCardDOM.appendChild(link);
@@ -58,35 +86,26 @@ const createMediaCard = (media, index) => {
 }
 
 /**
- * 
+ * Create image gallery
  * @param {import("../../utils/data").MediaObject[]} media 
+ * @returns {TStat}
  */
-async function createGrid(media) {
+const createGrid = async (media) => {
     const stats = {
         totalMedia: media.length,
         totalLikes: 0,
         totalPrice: 0,
     }
 
-    const mediaSection = document.querySelector(".photograph-images");
     const gridFrag = document.createDocumentFragment();
     media.forEach((mediaItem, i) => {
         gridFrag.appendChild(createMediaCard(mediaItem, i));
         stats.totalLikes += mediaItem.likes;
         stats.totalPrice += mediaItem.price;
     });
-    mediaSection.replaceChildren(gridFrag);
+    UIElements.component.galleryGrid.replaceChildren(gridFrag);
     return stats;
 };
-
-/**
- * Check if string is a integer
- */
-function isInteger(value) {
-    return !isNaN(value) &&
-        parseInt(Number(value)) == value &&
-        !isNaN(parseInt(value, 10));
-}
 
 export async function init(id) {
     // Récupère les datas des photographes
@@ -107,18 +126,19 @@ export async function init(id) {
     UIElements.photographer.name.innerHTML = photographer.name;
     UIElements.photographer.location.innerHTML = `${photographer.city}, ${photographer.country}`;
     UIElements.photographer.tagline.innerHTML = `${photographer.tagline}`;
-    UIElements.photographer.avatar.setAttribute("src", `img_data/Photographers ID Photos/${photographer.portrait}`);
+    UIElements.photographer.avatar.setAttribute("src", `assets/photographers/${photographer.portrait}`);
+    UIElements.photographer.avatar.setAttribute("alt", photographer.name);
 
     const mediaStat = await createGrid(sortedMedia);
-    UIElements.component.counter.children[0].innerHTML = `${mediaStat.totalLikes} ❤️`;
+    UIElements.component.counter.children[0].innerHTML = `${mediaStat.totalLikes} <i class="fa-solid fa-heart" title="Likes"></i>`;
     UIElements.component.counter.children[1].innerHTML = `${photographer.price} €`;
 
-    createSelectbox(UIElements.component.selectbox, UIElements.component.selectboxData, ({ index, value }) => {
+    createSelectbox(UIElements.component.selectbox, UIElements.component.selectboxData, ({ value }) => {
         const sortedMedia = sortMediaObjects(media, value.property);
         setLightboxMedia(sortedMedia);
         createGrid(sortedMedia);
     });
-};
+}
 
 let params = new URLSearchParams(document.location.search);
 if (isInteger(params.get("id"))) {

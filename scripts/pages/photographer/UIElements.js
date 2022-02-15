@@ -1,19 +1,19 @@
 export const UIElements = {
     photographer: {
-        name: document.getElementById("ui-name"),
-        avatar: document.getElementById("ui-avatar"),
-        location: document.getElementById("ui-location"),
-        tagline: document.getElementById("ui-tagline"),
+        name: document.querySelector("#ui-name"),
+        avatar: document.querySelector("#ui-avatar"),
+        location: document.querySelector("#ui-location"),
+        tagline: document.querySelector("#ui-tagline"),
     },
     component: {
-        contactBtn: document.getElementById("ui-contact-btn"),
-        selectbox: document.getElementById("selectbox-sorter"),
+        contactBtn: document.querySelector("#ui-contact-btn"),
+        selectbox: document.querySelector("#selectbox-sorter"),
         selectboxData: [{ title: "Popularité", property: "likes" }, { title: "Date", property: "date" }, { title: "Titre", property: "title" }],
-        galleryGrid: document.getElementById("photograph-images"),
-        counter: document.getElementById("ui-counter"),
+        galleryGrid: document.querySelector("#photograph-images"),
+        counter: document.querySelector("#ui-counter"),
     },
     modal: {
-        lightboxModal: document.getElementById("lightbox_modal"),
-        contactModal: document.getElementById("contact_modal"),
+        lightboxModal: document.querySelector("#lightbox_modal"),
+        contactModal: document.querySelector("#contact_modal"),
     }
-}
+};

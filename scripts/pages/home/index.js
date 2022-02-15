@@ -1,32 +1,43 @@
-async function getPhotographers() {
-    try {
-        const response = await fetch('./data/photographers.json');
-        if (!response.ok) {
-            throw new Error("HTTP error " + response.status);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error(error);
-        return { photographers: [] };
-    }
+import { getAllPhotographers, initData } from "../../utils/data.js";
+import { UIElements } from "./UIElements.js";
 
+/**
+ * Create Photographer element from data (BETTER SOLUTION/LESS CODE)
+ * @param {*} photographer Photographer object
+ * @returns Html DOM element
+ */
+function photographerFactory(photographer) {
+    const { id, name, portrait, city, country, price, tagline } = photographer;
+    const userCardDOM = document.createElement("article");
+    userCardDOM.innerHTML = `
+        <a href="/photographer.html?id=${id}" alt="${name}">
+          <img src="assets/photographers/${portrait}" alt="" loading="lazy"/>
+          <h2>${name}</h2>
+        </a>
+        <p>
+          <span>${city}, ${country}</span><br />
+          <span>${tagline}</span><br />
+          <span>${price}€</span>
+        </p>
+    `;
+    return userCardDOM;
 }
 
 async function displayData(photographers) {
-    const photographersSection = document.querySelector(".photographer_section");
+    const photographersSection = UIElements.component.photographerGrid;
 
+    const fragment = document.createDocumentFragment();
     photographers.forEach((photographer) => {
-        const photographerModel = photographerFactory(photographer);
-        const userCardDOM = photographerModel.getUserCardDOM();
-        photographersSection.appendChild(userCardDOM);
+        fragment.appendChild(photographerFactory(photographer));
     });
-};
+    photographersSection.replaceChildren(fragment);
+}
 
-async function init() {
+
+(async () => {
     // Récupère les datas des photographes
-    const { photographers } = await getPhotographers();
+    await initData();
+    const photographers = await getAllPhotographers();
     displayData(photographers);
-};
+})();
 
-init();

@@ -64,10 +64,10 @@ export const initData = async () => {
  */
 export const sortMediaObjects = (mediaArray, sortBy) => {
     switch (sortBy) {
-        case 'title':
-            return mediaArray.sort((a, b) => { return a[sortBy] < b[sortBy] ? -1 : 1; });
-        default:
-            return mediaArray.sort((a, b) => { return a[sortBy] < b[sortBy] ? 1 : -1; });
+    case 'title':
+        return mediaArray.sort((a, b) => { return a[sortBy] < b[sortBy] ? -1 : 1; });
+    default:
+        return mediaArray.sort((a, b) => { return a[sortBy] < b[sortBy] ? 1 : -1; });
     }
 }
 

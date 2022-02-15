@@ -3,10 +3,12 @@
 
 <head>
   <meta charset="utf-8">
-  <link href="css/style.css" rel="stylesheet" type="text/css" />
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Gallerie de photo">
+  <!-- <link rel="icon" type="image/png" href="assets/favicon.png"> -->
+  <link href="css/photographer.css" rel="stylesheet" type="text/css" />
   <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <title>Fisheye - photographe </title>
 </head>
 
@@ -19,29 +21,28 @@
       <div>
         <h1 id="ui-name"></h1>
         <p>
-          <span id="ui-location">London, UK</span><br />
-          <span id="ui-tagline">Voir le beau dans le quotidien</span>
+          <span id="ui-location"></span><br />
+          <span id="ui-tagline"></span>
         </p>
       </div>
       <button id="ui-contact-btn" class="contact_button">Contactez-moi</button>
-      <img id="ui-avatar" src="#" alt="" loading="lazy" />
+      <img id="ui-avatar" loading="lazy" />
     </div>
     <div class="photograph-sorter">
-      <label for="selectbox-sorter-button">Trier par</label>
+      <label id="selectbox-label" for="selectbox-sorter-button">Trier par</label>
       <div id="selectbox-sorter">
-        <button id="selectbox-sorter-button" class="selectbox-button" role="button" aria-haspopup="listbox" aria-expanded="false">Popularité<i class="fa fa-chevron-down"></i>
+        <button id="selectbox-sorter-button" class="selectbox-button" role="button" aria-haspopup="listbox" aria-expanded="false">Popularité<i class="fa-solid fa-chevron-down"></i>
         </button>
         <div role="listbox"
           class="selectbox-listbox"
           id="selectbox-sorter-listbox"
-          aria-activedescendant="listbox-sorter-1"
-          aria-selected="listbox-sorter-1"
-          aria-labelledby="selectbox-sorter-button"
+          aria-activedescendant="selectbox-option-selected"
+          aria-labelledby="selectbox-label"
           >
         </div>
       </div>
     </div>
-    <div class="photograph-images">
+    <div id="photograph-images">
     </div>
   </main>
   <div id="ui-counter">
@@ -50,11 +51,12 @@
   </div>
   <div id="lightbox_modal">
     <div class="modal">
-      <div style="width: 42px; margin-right: 1rem;"><a href="javascript:void(0);" class="lightbox-modal-prev" title="Previous Image"><i class="fa fa-chevron-left"></i></a></div>
+      <div style="width: 42px; margin-right: 1rem;">
+        <button class="lightbox-btn lightbox-modal-close" aria-label="Close dialog"><img src="assets/icons/close_red.svg" /></button>
+        <button class="lightbox-btn lightbox-modal-prev" aria-label="Previous Image"><i class="fa-solid fa-chevron-left"></i></button></div>
       <div></div>
       <div style="width: 42px; text-align: right; margin-left: 1rem;">
-        <img class="lightbox-modal-close" src="assets/icons/close_red.svg" alt="Close dialog" tabindex="0" />
-        <a href="javascript:void(0);" class="lightbox-modal-next" title="Next Image"><i class="fa fa-chevron-right"></i></a>
+        <button class="lightbox-btn lightbox-modal-next" aria-label="Next Image"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </div>
   </div>
@@ -62,7 +64,7 @@
     <div class="modal">
       <header>
         <h2 id="contact-modal-title"></h2>
-        <img class="contact-modal-close" src="assets/icons/close.svg" alt="Close Contact form" />
+        <button class="contact-btn contact-modal-close" aria-label="Close contact form"><img src="assets/icons/close.svg" /></button>
       </header>
       <form>
         <div class="formData">

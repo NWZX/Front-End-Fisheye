@@ -1,3 +1,6 @@
+@import url("style.css");
+/*#region Header*/
+
 .photograph-header {
     background-color: #FAFAFA;
     height: 300px;
@@ -16,6 +19,16 @@
     height: 200px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+/*#endregion*/
+
+/*#region Banner*/
+
+h1 {
+    color: #D3573C;
+    font-size: 3rem;
+    font-weight: 400;
 }
 
 .contact_button {
@@ -81,7 +94,7 @@ button.selectbox-button[aria-expanded="true"] .fa-chevron-down {
 button.selectbox-button[aria-expanded="true"] + div.selectbox-listbox div {
     border-top: 1px solid #fff;
 }
-button.selectbox-button[aria-expanded="true"] + div.selectbox-listbox .selectbox-option-selected {
+button.selectbox-button[aria-expanded="true"] + div.selectbox-listbox #selectbox-option-selected {
     display: none;
 }
 button.selectbox-button[aria-expanded="false"] + div.selectbox-listbox div {
@@ -105,32 +118,52 @@ button.selectbox-button[aria-expanded="false"] + div.selectbox-listbox div {
     text-align-last: justify;
 }
 
-.photograph-images {
+/*#endregion*/
+
+/*#region Gallery*/
+
+#photograph-images {
     margin: 0 100px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 70px;
     margin-top: 100px;
 }
+#photograph-images div{
+    text-align: center;
+}
 
-.photograph-images img, .photograph-images video {
+#photograph-images img, #photograph-images video {
     width: 300px;
     height: 300px;
     border-radius: 5px;
     object-fit: cover;
 }
 
-.photograph-images .images_bottom {
-    display: flex;
+#photograph-images .images_bottom {
+    width: 300px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
     align-items: center;
-    gap: 30px;
+    gap: 0px;
     flex-direction: row;
-}
-.images_bottom {
+
     color: #901C1C;
     font-size: larger;
     font-weight: 700;
 }
+#photograph-images .images_bottom p {
+    text-align: justify;
+    grid-column: span 10;
+}
+#photograph-images .images_bottom span {
+    grid-column: none;
+}
+
+/*#endregion*/
+
+/*#region Lightbox*/
 
 #lightbox_modal {
     display: none;
@@ -170,8 +203,27 @@ button.selectbox-button[aria-expanded="false"] + div.selectbox-listbox div {
     top: 0;
     right: 0;
     margin-top: 3rem;
+    margin-right: 1.25rem;
     cursor: pointer;
 }
+.lightbox-btn {
+    background: none;
+	color: #901C1C;
+	border: none;
+	padding: 0;
+	font-size: 3rem;
+	cursor: pointer;
+	outline: inherit;
+    display: inline;
+}
+.lightbox-btn:focus * {
+    outline: 2px solid #000;
+    border-radius: 5px;
+}
+
+/*#endregion*/
+
+/*#region Contact*/
 
 #contact_modal {
     display: none;
@@ -182,6 +234,10 @@ button.selectbox-button[aria-expanded="false"] + div.selectbox-listbox div {
     height: 100%;
     width: 100%;
     overflow: auto;
+    scrollbar-width: none;
+}
+#contact_modal::-webkit-scrollbar {
+  display: none;
 }
 
 #contact_modal .modal {
@@ -194,9 +250,6 @@ button.selectbox-button[aria-expanded="false"] + div.selectbox-listbox div {
     justify-content: space-between;
     padding: 35px;
     margin: 5% auto; 
-
-    animation-name: modalopen;
-    animation-duration: var(--modal-duration);
     overflow: hidden;
     position: relative;
 }
@@ -219,6 +272,21 @@ button.selectbox-button[aria-expanded="false"] + div.selectbox-listbox div {
     margin-bottom: 0.5rem;
 }
 
+.contact-btn {
+    background: none;
+	color: #FFF;
+	border: none;
+	padding: 0;
+	font-size: 3rem;
+	cursor: pointer;
+	outline: inherit;
+    display: inline;
+}
+.contact-btn:focus * {
+    outline: 2px solid #000;
+    border-radius: 5px;
+}
+
 form {
     display: flex;
     width: 100%;
@@ -235,8 +303,9 @@ form div {
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* align-items: self-start; */
-    margin-bottom: 26px;
+}
+form div:last-of-type {
+    margin-bottom: 1rem;
 }
 
 form input, form textarea {
@@ -248,16 +317,6 @@ form input, form textarea {
 }
 form textarea {
     height: 9rem;
-}
-
-@keyframes modalopen {
-  from {
-    opacity: 0;
-    transform: translateY(-150px);
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 .formData[data-error]::after {
@@ -276,6 +335,8 @@ form textarea {
     box-shadow: #f30018 0px 0px 0px 2px inset;
 }
 
+/*#endregion*/
+
 #ui-counter {
     position: sticky;
     display: flex;
@@ -288,7 +349,7 @@ form textarea {
     width: 240px;
     height: 40px;
     font-size: 1.5rem;
-    background-color: #901C1C;
+    background-color: #D3573C;
     font-weight: 700;
 }
 #ui-counter span{

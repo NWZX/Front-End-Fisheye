@@ -1,4 +1,5 @@
-import { isEmail } from "../../../utils/utils.js";
+import { captureTab, isEmail } from "../../../utils/utils.js";
+import { UIElements } from "../UIElements.js";
 
 /**
  * 
@@ -6,6 +7,7 @@ import { isEmail } from "../../../utils/utils.js";
  */
 export const displayContactModal = (contactModalElement) => {
     contactModalElement.style.display = "block";
+    contactModalElement.getElementsByClassName("contact-modal-close")[0].focus();
 }
 
 /**
@@ -14,6 +16,7 @@ export const displayContactModal = (contactModalElement) => {
  */
 export const closeContactModal = (contactModalElement) => {
     contactModalElement.style.display = "none";
+    UIElements.component.contactBtn.focus();
 }
 
 /**
@@ -21,31 +24,33 @@ export const closeContactModal = (contactModalElement) => {
  * @param {HTMLDivElement} contactModalElement 
  */
 export const initContactModal = (contactModalElement, photographer) => {
-    document.getElementById('contact-modal-title').innerHTML = `Contactez-moi<br>${photographer.name}`;
-    contactModalElement.getElementsByClassName("contact-modal-close")[0].addEventListener("click", (e) => {
+    const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusableContent = contactModalElement.querySelectorAll(focusableElements);
+  
+    contactModalElement.querySelector('#contact-modal-title').innerHTML = `Contactez-moi<br>${photographer.name}`;
+    contactModalElement.querySelector(".contact-modal-close").addEventListener("click", () => {
         closeContactModal(contactModalElement);
     });
-
-    // Add realtime validation
+    contactModalElement.addEventListener('keydown', function (e) {
+        e.key == "Tab" && captureTab(e, focusableContent);
+    });
 
     /**
+     * Add validation to the input elements
      * @type {FormDataSubmit & HTMLFormElement} reserveForm
      */
     const contactForm = contactModalElement.getElementsByTagName("form")[0]
     checkFormRealtime(contactForm);
-
-    // Add validation on submit
-
     contactForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        checkForm(e.target);
+        checkForm(e.target, contactModalElement);
     });
 }
 
 const errorMessageFirstName = "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
 const errorMessageLastName = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
 const errorMessageEmail = "Veuillez entrer une adresse email valide.";
-const errorMessageMessage = "Veuillez entrer 100 caractères ou plus pour le champ du message.";
+const errorMessageMessage = "Message vide.";
 
 /**
  * Validator for the names field
@@ -53,7 +58,7 @@ const errorMessageMessage = "Veuillez entrer 100 caractères ou plus pour le cha
  * @returns {boolean}
  */
 const validateNameField = (value) => {
-  return value.trim().length > 1;
+    return value.trim().length > 1;
 }
 
 /**
@@ -62,16 +67,17 @@ const validateNameField = (value) => {
  * @returns {boolean}
  */
 const validateEmailField = (value) => {
-  return isEmail(value);
+    return isEmail(value);
 }
 
 /**
  * Validator for the message field
  * @param {string} value 
  * @returns {boolean}
+ * @disabled
  */
 const validateMessageField = (value) => {
-  return value.trim().length > 99;
+    return value.trim().length > 0;
 }
 
 /**
@@ -81,17 +87,17 @@ const validateMessageField = (value) => {
  * @param {boolean} [hide=true] Hide error on change
  */
 const showError = (inputElement, errorMessage, hide = true) => {
-  inputElement.parentElement.setAttribute("data-error", errorMessage);
-  hide && hideError(inputElement);
+    inputElement.parentElement.setAttribute("data-error", errorMessage);
+    hide && hideError(inputElement);
 }
 /**
  * Hide the validation error
  * @param {HTMLInputElement} inputElement Input element
  */
 const hideError = (inputElement) => {
-  inputElement.addEventListener("focus", (e) => {
-    inputElement.parentElement.removeAttribute('data-error');
-  });
+    inputElement.addEventListener("focus", () => {
+        inputElement.parentElement.removeAttribute('data-error');
+    });
 }
 
 /**
@@ -102,10 +108,10 @@ const hideError = (inputElement) => {
  */
 const textInputValidation = (inputElement, validator, errorMessage) => {
     if (!validator(inputElement.value)) {
-      showError(inputElement, errorMessage);
-      return false;
+        showError(inputElement, errorMessage);
+        return false;
     }
-  return true;
+    return true;
 }
 
 
@@ -116,26 +122,32 @@ const textInputValidation = (inputElement, validator, errorMessage) => {
  * @param {string} errorMessage Error message to display
  */
 const textInputRealtimeValidation = (inputElement, validator, errorMessage) => {
-  inputElement.addEventListener("keyup", (e) => {
-    if (!validator(e.target.value)) {
-      showError(e.target, errorMessage, false);
-    } else {
-      e.target.parentElement.removeAttribute('data-error');
-    }
-  });
+    inputElement.addEventListener("keyup", (e) => {
+        if (!validator(e.target.value)) {
+            showError(e.target, errorMessage, false);
+        } else {
+            e.target.parentElement.removeAttribute('data-error');
+        }
+    });
 }
 
 /** 
  * Check data validity and transform it to {@link FormDataFinal}
  * @param {FormDataSubmit} data
+ * @param {HTMLDivElement} contactModalElement
  */
-export const checkForm = (data) => {
-  let isValid = true;
+export const checkForm = (data, contactModalElement) => {
+    let isValid = true;
   
-  isValid = isValid && textInputValidation(data.firstName, validateNameField, errorMessageFirstName);
-  isValid = isValid && textInputValidation(data.lastName, validateNameField, errorMessageLastName);
-  isValid = isValid && textInputValidation(data.email, validateEmailField, errorMessageEmail);
-  isValid = isValid && textInputValidation(data.message, validateMessageField, errorMessageMessage);
+    isValid = isValid && textInputValidation(data.firstName, validateNameField, errorMessageFirstName);
+    isValid = isValid && textInputValidation(data.lastName, validateNameField, errorMessageLastName);
+    isValid = isValid && textInputValidation(data.email, validateEmailField, errorMessageEmail);
+    isValid = isValid && textInputValidation(data.message, validateMessageField, errorMessageMessage);
+
+    if (isValid) {
+        console.log({ firstName: data.firstName.value, lastName: data.lastName.value, email: data.email.value, message: data.message.value })
+        closeContactModal(contactModalElement);
+    }
 }
 
 /**
@@ -143,8 +155,8 @@ export const checkForm = (data) => {
  * @param {FormDataSubmit & HTMLFormElement} reserveForm 
  */
 export const checkFormRealtime = (reserveForm) => {
-  textInputRealtimeValidation(reserveForm.firstName, validateNameField, errorMessageFirstName);
-  textInputRealtimeValidation(reserveForm.lastName, validateNameField, errorMessageLastName);
-  textInputRealtimeValidation(reserveForm.email, validateEmailField, errorMessageEmail);
-  textInputRealtimeValidation(reserveForm.message, validateMessageField, errorMessageMessage);
+    textInputRealtimeValidation(reserveForm.firstName, validateNameField, errorMessageFirstName);
+    textInputRealtimeValidation(reserveForm.lastName, validateNameField, errorMessageLastName);
+    textInputRealtimeValidation(reserveForm.email, validateEmailField, errorMessageEmail);
+    textInputRealtimeValidation(reserveForm.message, validateMessageField, errorMessageMessage);
 }
